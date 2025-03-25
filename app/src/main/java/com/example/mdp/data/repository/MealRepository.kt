@@ -1,19 +1,30 @@
 package com.example.mdp.data.repository
 
-import android.util.Log
 import com.example.mdp.data.database.MealDao
-import com.example.mdp.data.models.Meal
+import com.example.mdp.data.model.Meal
+import com.example.mdp.data.model.NutritionInfo
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class MealRepository(private val mealDao: MealDao) {
+
+    val allMeals: Flow<List<Meal>> = mealDao.getAllMeals()
+    private val todayMeals: Flow<List<Meal>> = mealDao.getTodayMeals()
+
+    fun getTodayNutrition(): Flow<NutritionInfo> {
+        return todayMeals.map { meals ->
+            NutritionInfo(
+                calories = meals.sumOf { it.calories },
+                fats = meals.sumOf { it.fats },
+                carbs = meals.sumOf { it.carbs },
+                proteins = meals.sumOf { it.proteins }
+            )
+        }
+    }
 
     // Insert a meal into the database
     suspend fun insertMeal(meal: Meal) {
         mealDao.insertMeal(meal)
-    }
-
-    // Get all meals from the database
-    suspend fun getAllMeals(): List<Meal> {
-        return mealDao.getAllMeals()
     }
 
     // Delete a meal from the database
@@ -21,18 +32,4 @@ class MealRepository(private val mealDao: MealDao) {
         mealDao.deleteMeal(meal)
     }
 
-    // Insert a test meal into the database
-    suspend fun insertTestMeal() {
-       Log.e("MealRepository", "Inserting test meal")
-        val testMeal = Meal(
-            name = "Test Meal",
-            calories = 500,
-            fats = 20,
-            carbs = 50,
-            proteins = 30,
-            imagePath = "path/to/image",
-            timestamp = System.currentTimeMillis()
-        )
-        insertMeal(testMeal)
-    }
 }

@@ -2,7 +2,6 @@ package com.example.mdp.ui.components.profilepage
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,13 +15,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.mdp.data.models.Meal
+import com.example.mdp.data.model.Meal
 
 @Composable
 fun ProfileFoodCard(meal: Meal) {
     Card(
         modifier = Modifier
             .padding(8.dp)
+            .size(200.dp)
     ) {
         Column {
             Text(

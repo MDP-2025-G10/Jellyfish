@@ -1,40 +1,32 @@
 package com.example.mdp.viewmodels
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.liveData
-import com.example.mdp.data.database.MealDatabase
-import com.example.mdp.data.models.Meal
+import com.example.mdp.data.model.Meal
+import com.example.mdp.data.model.NutritionInfo
 import com.example.mdp.data.repository.MealRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class MealViewModel(application: Application) : AndroidViewModel(application) {
+class MealViewModel(private val mealRepository: MealRepository) : ViewModel() {
 
-    private val mealDao = MealDatabase.getDatabase(application).mealDao()
-    private val mealRepository = MealRepository(mealDao)
+    val todayNutrition: StateFlow<NutritionInfo> = mealRepository.getTodayNutrition()
+        .stateIn(viewModelScope, SharingStarted.Lazily, NutritionInfo())
 
-    // LiveData to observe meal data
-    val allMeals: LiveData<List<Meal>> = liveData(Dispatchers.IO) {
-        emit(mealRepository.getAllMeals())
-    }
+    val allMealList: StateFlow<List<Meal>> = mealRepository.allMeals
+        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
     // Insert a meal into the database
-    fun insertMeal(meal: Meal) {
-        viewModelScope.launch(Dispatchers.IO) {
-            mealRepository.insertMeal(meal)
-        }
+    fun insertMeal(meal: Meal) = viewModelScope.launch(Dispatchers.IO) {
+        mealRepository.insertMeal(meal)
     }
 
     // Delete a meal from the database
-    fun deleteMeal(meal: Meal) {
-        viewModelScope.launch(Dispatchers.IO) {
-            mealRepository.deleteMeal(meal)
-            }
-        }
-    fun insertTestMeal() = viewModelScope.launch {
-        mealRepository.insertTestMeal()
+    fun deleteMeal(meal: Meal) = viewModelScope.launch(Dispatchers.IO) {
+        mealRepository.deleteMeal(meal)
     }
+
 }

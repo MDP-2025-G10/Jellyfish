@@ -1,7 +1,7 @@
 package com.example.mdp.data.database
 
 import androidx.room.*
-import com.example.mdp.data.models.Workouts
+import com.example.mdp.data.model.Workouts
 
 @Dao
 interface WorkoutDao {

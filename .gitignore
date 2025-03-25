@@ -29,7 +29,8 @@ replay_pid*
 .kotlin/
 
 # Gradle files
-.gradle/
+.gradle/**
+
 build/
 **/build/
 **/outputs/
@@ -38,7 +39,7 @@ build/
 **/tmp/
 
 # Android Studio files
-.idea/
+.idea/**
 *.iml
 *.hprof
 

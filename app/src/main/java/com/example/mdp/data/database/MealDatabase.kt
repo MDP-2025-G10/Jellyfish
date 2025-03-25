@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.mdp.data.models.Meal
+import com.example.mdp.data.model.Meal
 
 @Database(entities = [Meal::class], version = 1, exportSchema = false)
 abstract class MealDatabase : RoomDatabase() {

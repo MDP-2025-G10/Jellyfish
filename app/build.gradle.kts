@@ -1,9 +1,19 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.google.services)
+}
+
+val localProperties = Properties().apply {
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        load(FileInputStream(localPropertiesFile))
+    }
 }
 
 android {
@@ -18,6 +28,8 @@ android {
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled = true
+        val usdaApiKey = localProperties.getProperty("USDA_API_KEY") ?: ""
+        buildConfigField("String", "USDA_API_KEY", usdaApiKey)
     }
 
     buildTypes {
@@ -68,24 +80,16 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-      // api
-//    implementation(libs.retrofit)
-//    implementation(libs.converter.gson)
+    // RESTFul API
 //    implementation(libs.kotlinx.coroutines.android)
 //    implementation(libs.logging.interceptor)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
 
 //     Room
-    implementation(libs.room.ktx)
-    implementation(libs.room.runtime)
-    ksp(libs.room.compiler)
-
-
-    //implementations were nuked so i have the the original line before here just in case
-    /*
-     implementation(" androidx.room:room-ktx:2.4.0-alpha04")
-    implementation(" androidx.room:room-runtime:2.4.0-alpha04")
-    ksp(" androidx.room:room-compiler:2.4.0-alpha04")
-    */
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
 
 
 //    material icons extension
@@ -116,5 +120,11 @@ dependencies {
 
     // Google Sign-In
     implementation(libs.googleid)
+
+    //  Vico Recharts
+    implementation(libs.vico.compose)
+    implementation(libs.vico.compose.m3)
+
+
 
 }

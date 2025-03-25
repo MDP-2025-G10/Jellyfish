@@ -2,4 +2,6 @@
     <string name="app_name">MDP</string>
     <string name="web_client_id">1078398585171-mn95v6ojbp4rimls3r10ib401be4kdc5.apps.googleusercontent.com</string>
     <string name="android_client_id">1078398585171-nq37ukum74mabqa9u0ciq92l41ed9u93.apps.googleusercontent.com</string>
+    <string name="channel_name">MDP_Notifications</string>
+    <string name="channel_description">this is a test  channel</string>
 </resources>

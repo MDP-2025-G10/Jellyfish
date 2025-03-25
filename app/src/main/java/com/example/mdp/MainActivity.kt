@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import com.example.mdp.navigation.AppNavController
+import com.example.mdp.notifications.NotificationHelper
 import com.example.mdp.ui.theme.MDPTheme
 
 class MainActivity : ComponentActivity() {
@@ -15,6 +16,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        NotificationHelper.createNotificationChannel(this)
 
         setContent {
             MDPTheme {
