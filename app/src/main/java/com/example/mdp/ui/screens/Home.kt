@@ -4,9 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,8 +15,7 @@ import com.example.mdp.ui.components.home.DailyIntakeProgressCard
 import com.example.mdp.ui.components.toolbar.BottomBar
 import com.example.mdp.ui.components.toolbar.TopBar
 import com.example.mdp.firebase.auth.viewModel.AuthViewModel
-import com.example.mdp.notifications.NotificationHelper
-import com.example.mdp.viewmodels.MealViewModel
+import com.example.mdp.data.viewmodel.MealViewModel
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -41,9 +38,7 @@ fun Home(
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             DailyIntakeProgressCard(navController, mealViewModel)
-            CalorieHistoryChart()
-
-
+            CalorieHistoryChart(mealViewModel)
         }
     }
 }

@@ -1,7 +1,8 @@
-package com.example.mdp.viewmodels
+package com.example.mdp.data.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.mdp.data.model.DailyCalories
 import com.example.mdp.data.model.Meal
 import com.example.mdp.data.model.NutritionInfo
 import com.example.mdp.data.repository.MealRepository
@@ -19,14 +20,15 @@ class MealViewModel(private val mealRepository: MealRepository) : ViewModel() {
     val allMealList: StateFlow<List<Meal>> = mealRepository.allMeals
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
-    // Insert a meal into the database
+    val calorieHistory: StateFlow<List<DailyCalories>> =
+        mealRepository.getCaloriesForLast7Days()
+            .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
     fun insertMeal(meal: Meal) = viewModelScope.launch(Dispatchers.IO) {
         mealRepository.insertMeal(meal)
     }
 
-    // Delete a meal from the database
     fun deleteMeal(meal: Meal) = viewModelScope.launch(Dispatchers.IO) {
         mealRepository.deleteMeal(meal)
     }
-
 }

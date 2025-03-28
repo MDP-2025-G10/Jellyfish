@@ -1,6 +1,7 @@
 package com.example.mdp.ui.components.home
 
-import android.content.pm.PackageManager
+import android.Manifest
+import androidx.annotation.RequiresPermission
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,35 +11,23 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat
-import android.Manifest
-import android.util.Log
-import com.example.mdp.notifications.NotificationHelper
+import com.example.mdp.data.viewmodel.MealViewModel
+import com.example.mdp.notifications.notificationsubjects.IntakeNotification
 
+@RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
 @Composable
-fun CaloriesBar(amountsConsumed: Float, dailyAmountGoal: Float) {
+fun CaloriesBar(mealViewModel: MealViewModel, amountsConsumed: Float, dailyAmountGoal: Float) {
+    IntakeNotification(mealViewModel = mealViewModel, totalCalories = amountsConsumed.toInt(), dailyGoal = dailyAmountGoal.toInt())
     val progress = amountsConsumed / dailyAmountGoal
-
-
-    //work in progress
-    val currentAmountsConsumed = rememberUpdatedState(amountsConsumed)
-
-    //work in progress
-    if (currentAmountsConsumed.value != amountsConsumed) {
-            CaloriesNotification(amountsConsumed)
-
-    }
-
-
-
+    val isOverLimit = amountsConsumed > dailyAmountGoal
+    val textColor = if (isOverLimit) Color(0xFFAA5559) else Color.LightGray
 
     Column(
         modifier = Modifier
@@ -59,50 +48,41 @@ fun CaloriesBar(amountsConsumed: Float, dailyAmountGoal: Float) {
                 text = "${amountsConsumed.toInt()}/${dailyAmountGoal.toInt()}",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 10.dp)
+                modifier = Modifier.padding(bottom = 10.dp),
+                color = textColor
             )
         }
-        CustomProgressBar(progress)
+        CustomProgressBar(progress, textColor)
     }
 }
 
 @Composable
-fun CustomProgressBar(progress: Float) {
+fun CustomProgressBar(progress: Float, progressColor: Color) {
     Canvas(
         modifier = Modifier
             .fillMaxWidth()
             .height(8.dp)
     ) {
-        val barWidth = size.width * progress
+        val barWidth = size.width
+        val clampedProgress = progress.coerceIn(0f, 1f) // Prevent overflow
+        val progressWidth = barWidth * clampedProgress
+        val barHeight = size.height
+        val cornerRadius = CornerRadius(4.dp.toPx(), 4.dp.toPx())
+
+        // background track
         drawRoundRect(
-            color = Color.LightGray,
-            size = androidx.compose.ui.geometry.Size(barWidth, size.height),
-            cornerRadius = androidx.compose.ui.geometry.CornerRadius(4.dp.toPx())
+            color = Color(0xFF5E5E5E),
+            size = Size(barWidth, barHeight),
+            cornerRadius = cornerRadius
+        )
+
+        // foreground progress
+        drawRoundRect(
+            color = progressColor,
+            size = Size(progressWidth, barHeight),
+            cornerRadius = cornerRadius
         )
     }
 }
-//work in progress
-//to  complete later
-@Composable
-fun CaloriesNotification(amountsConsumed: Float) {
-    val context = LocalContext.current
 
-    Log.e("CaloriesNotification", "Amounts consumed: $amountsConsumed")
-
-    LaunchedEffect(amountsConsumed) {
-        if (ContextCompat.checkSelfPermission(
-                context,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-
-                NotificationHelper.sendNotification(
-                    context = context,
-                    title = "Calories Updated",
-                    message = "You have consumed ${amountsConsumed.toInt()} calories today.",
-                    notificationid = 3
-                )
-            }
-        }
-    }
 

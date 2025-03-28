@@ -21,3 +21,8 @@ data class NutritionInfo(
     val carbs: Int = 0,
     val proteins: Int = 0
 )
+
+data class DailyCalories(
+    val totalCalories: Int,
+    val date: String? // Format: YYYY-MM-DD
+)

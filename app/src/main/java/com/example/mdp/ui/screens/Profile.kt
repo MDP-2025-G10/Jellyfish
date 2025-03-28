@@ -17,16 +17,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.mdp.data.model.NutritionInfo
 import com.example.mdp.ui.components.toolbar.TopBar
 import com.example.mdp.firebase.auth.viewModel.AuthViewModel
 import com.example.mdp.ui.components.profilepage.ProfileCard
 import com.example.mdp.ui.components.profilepage.ProfileFoodCard
 import com.example.mdp.ui.components.profilepage.ProfilePageWorkoutCard
-import com.example.mdp.viewmodels.MealViewModel
-import com.example.mdp.viewmodels.WorkoutViewModel
+import com.example.mdp.data.viewmodel.MealViewModel
+import com.example.mdp.data.viewmodel.WorkoutViewModel
 import org.koin.androidx.compose.koinViewModel
-import androidx.compose.runtime.getValue
 
 
 @Composable

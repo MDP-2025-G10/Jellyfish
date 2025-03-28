@@ -1,4 +1,4 @@
-package com.example.mdp.viewmodels
+package com.example.mdp.data.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel

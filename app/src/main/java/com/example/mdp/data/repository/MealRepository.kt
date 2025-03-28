@@ -1,6 +1,7 @@
 package com.example.mdp.data.repository
 
 import com.example.mdp.data.database.MealDao
+import com.example.mdp.data.model.DailyCalories
 import com.example.mdp.data.model.Meal
 import com.example.mdp.data.model.NutritionInfo
 import kotlinx.coroutines.flow.Flow
@@ -22,6 +23,11 @@ class MealRepository(private val mealDao: MealDao) {
         }
     }
 
+    fun getCaloriesForLast7Days(): Flow<List<DailyCalories>> {
+        val sevenDaysAgo = System.currentTimeMillis() / 1000 - (7 * 24 * 60 * 60) // Convert to UNIX timestamp
+        return mealDao.getCaloriesForLast7Days(sevenDaysAgo)
+    }
+
     // Insert a meal into the database
     suspend fun insertMeal(meal: Meal) {
         mealDao.insertMeal(meal)
@@ -31,5 +37,4 @@ class MealRepository(private val mealDao: MealDao) {
     suspend fun deleteMeal(meal: Meal) {
         mealDao.deleteMeal(meal)
     }
-
 }

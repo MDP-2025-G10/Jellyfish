@@ -1,4 +1,4 @@
-package com.example.mdp.ui.window
+package com.example.mdp.ui.components.food
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,41 +9,26 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
-import com.example.mdp.usda.model.FoodItem
 import com.example.mdp.data.model.Meal
-import com.example.mdp.viewmodels.MealViewModel
+import com.example.mdp.data.viewmodel.MealViewModel
 
 
 @Composable
 fun FoodPopUp(
     mealViewModel: MealViewModel,
-    food: FoodItem,
+    meal: Meal,
     onDismiss: () -> Unit
 ) {
-
-    var mealName by remember { mutableStateOf(food.name) }
-    val calories by remember {
-        mutableIntStateOf(
-            getNutrientValue(food, "Energy").toIntOrNull() ?: 0
-        )
-    }
-    val fats by remember { mutableIntStateOf(getNutrientValue(food, "Fat").toIntOrNull() ?: 0) }
-    val carbs by remember {
-        mutableIntStateOf(
-            getNutrientValue(food, "Carbohydrate").toIntOrNull() ?: 0
-        )
-    }
-    val proteins by remember {
-        mutableIntStateOf(
-            getNutrientValue(food, "Protein").toIntOrNull() ?: 0
-        )
-    }
+    var mealName by remember { mutableStateOf(meal.name) }
+    val calories by remember { mutableStateOf(meal.calories.toString()) }
+    val fats by remember { mutableStateOf(meal.fats.toString()) }
+    val carbs by remember { mutableStateOf(meal.carbs.toString()) }
+    val protein by remember { mutableStateOf(meal.proteins.toString()) }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -58,28 +43,28 @@ fun FoodPopUp(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
                 OutlinedTextField(
-                    value = calories.toString(),
+                    value = calories,
                     onValueChange = { it.toIntOrNull() ?: 0 },
                     label = { Text("Calories (kcal)") },
                     modifier = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
                 OutlinedTextField(
-                    value = fats.toString(),
+                    value = fats,
                     onValueChange = { it.toIntOrNull() ?: 0 },
                     label = { Text("Fats (g)") },
                     modifier = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
                 OutlinedTextField(
-                    value = carbs.toString(),
+                    value = carbs,
                     onValueChange = { it.toIntOrNull() ?: 0 },
                     label = { Text("Carbs (g)") },
                     modifier = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
                 OutlinedTextField(
-                    value = proteins.toString(),
+                    value = protein,
                     onValueChange = { it.toIntOrNull() ?: 0 },
                     label = { Text("Proteins (g)") },
                     modifier = Modifier.fillMaxWidth(),
@@ -94,10 +79,10 @@ fun FoodPopUp(
                 if (mealName.isNotEmpty()) {
                     val newMeal = Meal(
                         name = mealName,
-                        calories = calories,
-                        fats = fats,
-                        carbs = carbs,
-                        proteins = proteins,
+                        calories = calories.toIntOrNull() ?: 0,
+                        fats = fats.toIntOrNull() ?: 0,
+                        carbs = carbs.toIntOrNull() ?: 0,
+                        proteins = protein.toIntOrNull() ?: 0,
                         imagePath = "",
                         timestamp = System.currentTimeMillis()
                     )
@@ -117,8 +102,8 @@ fun FoodPopUp(
 }
 
 
-private fun getNutrientValue(food: FoodItem, nutrientName: String): String {
-    return food.nutrients.find { it.name.contains(nutrientName, true) }
-        ?.value?.toInt()?.toString() ?: "0"
-}
+//private fun getNutrientValue(food: FoodItem, nutrientName: String): String {
+//    return food.nutrients.find { it.name.contains(nutrientName, true) }
+//        ?.value?.toInt()?.toString() ?: "0"
+//}
 
