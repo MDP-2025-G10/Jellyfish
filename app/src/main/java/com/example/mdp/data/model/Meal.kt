@@ -24,5 +24,5 @@ data class NutritionInfo(
 
 data class DailyCalories(
     val totalCalories: Int,
-    val date: String? // Format: YYYY-MM-DD
+    val date: String?, // Format: YYYY-MM-DD
 )

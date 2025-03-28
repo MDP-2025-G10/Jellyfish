@@ -25,6 +25,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.mdp.notifications.ReminderScheduler
+import com.example.mdp.notifications.notificationcomponents.ReminderInputField
+import com.example.mdp.notifications.notificationsubjects. scheduleWaterReminder
 import com.example.mdp.ui.components.toolbar.BottomBar
 import com.example.mdp.ui.components.toolbar.TopBar
 import org.koin.androidx.compose.koinViewModel
@@ -63,34 +65,13 @@ fun Setting(navController: NavController) {
                 Text("Settings Screen")
 
                 // Water Reminder Input
-                Text("Water Reminder Interval (minutes)")
-                BasicTextField(
-                    value = waterIntervalState.value,
-                    onValueChange = { waterIntervalState.value = it },
-                    textStyle = androidx.compose.ui.text.TextStyle(color = Color.White),
-                    modifier = Modifier.fillMaxWidth().padding(16.dp),
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
-                )
+                ReminderInputField(label = "Water Reminder Interval (minutes)", state = waterIntervalState)
 
                 // Task Reminder Input
-                Text("Task Reminder Interval (minutes)")
-                BasicTextField(
-                    value = taskIntervalState.value,
-                    onValueChange = { taskIntervalState.value = it },
-                    textStyle = androidx.compose.ui.text.TextStyle(color = Color.White),
-                    modifier = Modifier.fillMaxWidth().padding(16.dp),
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
-                )
+                ReminderInputField(label = "Task Reminder Interval (minutes)", state = taskIntervalState)
 
                 // Exercise Reminder Input
-                Text("Exercise Reminder Interval (minutes)")
-                BasicTextField(
-                    value = exerciseIntervalState.value,
-                    onValueChange = { exerciseIntervalState.value = it },
-                    textStyle = androidx.compose.ui.text.TextStyle(color = Color.White),
-                    modifier = Modifier.fillMaxWidth().padding(16.dp),
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
-                )
+                ReminderInputField(label = "Exercise Reminder Interval (minutes)", state = exerciseIntervalState)
 
                 // Save Button
                 Button(
@@ -108,7 +89,7 @@ fun Setting(navController: NavController) {
                         }
 
                         // Schedule reminders using ReminderScheduler
-                        ReminderScheduler.scheduleReminder(navController.context, 4, waterInterval, "Water Reminder", "Time to drink water!")  // Water Reminder
+                        scheduleWaterReminder(navController.context, waterInterval, "Water Reminder", "Time to drink water!")  // Water Reminder
                         ReminderScheduler.scheduleReminder(navController.context, 5, taskInterval, "Task Reminder", "Time to complete your task!")   // Task Reminder
                         ReminderScheduler.scheduleReminder(navController.context, 6, exerciseInterval, "Exercise Reminder", "Time to exercise!") // Exercise Reminder
 
